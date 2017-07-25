@@ -5,12 +5,12 @@ namespace pbrt.integrators
 {
     public class WhittedIntegrator : SamplerIntegrator
     {
-        private int _maxDepth;
+        private int maxDepth;
 
-        public WhittedIntegrator(Camera camera, Sampler sampler, int maxDepth = 5)
+        public WhittedIntegrator(Camera camera, Sampler sampler, int depth = 5)
             : base(sampler, camera)
         {
-            _maxDepth = maxDepth;
+            maxDepth = depth;
         }
 
         public override Spectrum Li(RayDifferential ray, Scene scene, Sampler sampler, int depth = 0)
@@ -44,7 +44,7 @@ namespace pbrt.integrators
                 if (Li.IsBlack() || pdf == 0)
                     continue;
 
-                // Evaluate the scatteering at the interaction point
+                // Evaluate the scattering at the interaction point
                 var f = inter.Bsdf.f(wo, wi);
 
                 // Trace a shadow ray to check that the point receives light
@@ -58,9 +58,9 @@ namespace pbrt.integrators
             }
 
             // Recursively trace new rays
-            if (depth + 1 < _maxDepth)
+            if (depth + 1 < maxDepth)
             {
-                //L += SpecularReflect(ray, inter, scene, sampler, depth);
+                L += SpecularReflect(ray, inter, scene, sampler, depth);
                 //L += SpecularTransmit(ray, inter, scene, sampler, depth);
             }
 
@@ -70,14 +70,28 @@ namespace pbrt.integrators
         private Spectrum SpecularReflect(RayDifferential ray, SurfaceInteraction inter, Scene scene, Sampler sampler, int depth)
         {
             // Sample a direction with the BSDF
-            /*var type = BxDF.BxDFType.Reflection | BxDF.BxDFType.Reflection;
-            var f = inter.Bsdf.Sample_f(inter.Wo, out Vector3<float> wi, sampler.Get2D(), out float pdf, type);
+            var type = BxDF.BxDFType.Reflection | BxDF.BxDFType.Specular;
+            var f = inter.Bsdf.Sample_f(inter.Wo, out Vector3<float> wi, sampler.Get2D(), out float pdf, type, out BxDF.BxDFType sampledType);
 
-            //
-            if (pdf > 0 && !f.isBlack() && Vector3<float>.AbsDot(wi, inter.Shading.N) != 0)
-                return f * Li(ray, scene, sampler, depth + 1) * Vector3<float>.AbsDot(wi, inter.Shading.N) / pdf;
-            */
+            // Add the contribution of this reflection
+            if (pdf > 0 && !f.IsBlack() && Vector3<float>.AbsDot(wi, inter.Shading.N) != 0)
+            {
+                var newRay = inter.SpawnRay(wi).ToDiff();
+
+                if (ray.HasDifferentials)
+                {
+                    // TODO
+                }
+
+                return f * Li(newRay, scene, sampler, depth + 1) * Vector3<float>.AbsDot(wi, inter.Shading.N) * (1.0f / pdf);
+            }
+
             return Spectrum.Zero;
+        }
+
+        public override string ToString()
+        {
+            return $"Whitted (depth: {maxDepth})";
         }
     }
 }

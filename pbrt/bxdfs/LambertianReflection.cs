@@ -22,10 +22,5 @@ namespace pbrt.bxdfs
             // Incident illumination is scattered equally in all directions
             return r * invPi;
         }
-
-        public override Spectrum Sample_f(Vector3<float> wo, out Vector3<float> wi, Point2<float> sample, out float pdf, out BxDFType type)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

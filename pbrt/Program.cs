@@ -1,5 +1,6 @@
 ﻿using pbrt.core;
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace pbrt
@@ -13,11 +14,13 @@ namespace pbrt
 
         static void Main(string[] args)
         {
-            //Setups.Dummy().Render(null);
-            //Setups.Depth().Render(Scenes.Spheres());
-            //Setups.Whitted().Render(Scenes.Spheres());
-            Do(Setups.Whitted(), Scenes.Spheres());
-            Do(Setups.Whitted(), Scenes.Mirrors());
+            //Do(Setups.Dummy(), null);
+            //Do(Setups.Depth(), Scenes.Spheres());
+            //Do(Setups.Whitted(), Scenes.Spheres());
+            //Do(Setups.Whitted(), Scenes.ManySpheres());
+            Do(Setups.Whitted(1), Scenes.Mirrors());
+            Do(Setups.Whitted(2), Scenes.Mirrors());
+            Do(Setups.Whitted(3), Scenes.Mirrors());
 
             Console.Read();
         }
@@ -33,6 +36,8 @@ namespace pbrt
 
                 window.Run();
             });
+
+            //Thread.Sleep(1000);
         }
     }
 }

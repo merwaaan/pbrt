@@ -25,6 +25,14 @@ namespace pbrt
         }
 
         // Create a ray originating from this interaction point and going to the given one.
+        public Ray SpawnRay(Vector3<float> dir)
+        {
+            var origin = P + dir.Normalized() * 0.01f; // Add offset to be on the right side of the surface
+
+            return new Ray(origin, dir.Normalized());
+        }
+
+        // Create a ray originating from this interaction point and going to the given one.
         public Ray SpawnRayTo(Interaction inter)
         {
             var dir = (inter.P - P).Normalized();

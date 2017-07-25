@@ -20,7 +20,7 @@ namespace pbrt
         private int texture;
 
         public Window(Integrator integrator, Scene scene)
-            : base(Program.Width, Program.Height, GraphicsMode.Default, "PBRT",
+            : base(Program.Width, Program.Height, GraphicsMode.Default, $"PBRT - {integrator}",
                   GameWindowFlags.Default, DisplayDevice.Default,
                   3, 0, GraphicsContextFlags.ForwardCompatible)
         {

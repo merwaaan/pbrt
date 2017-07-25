@@ -2,6 +2,7 @@
 
 namespace pbrt.core
 {
+    // A fresnel model gives the fraction of incoming light that is reflected
     public abstract class Fresnel
     {
         public abstract Spectrum Evaluate(float cosThetaI);

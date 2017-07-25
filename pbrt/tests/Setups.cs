@@ -34,7 +34,7 @@ namespace pbrt
             return new DepthIntegrator(new PixelSampler(1, 0), camera);
         }
         
-        public static Integrator Whitted()
+        public static Integrator Whitted(int depth)
         {
             var film = new Film(new Point2<int>(800, 800), new Bounds2<float>(Point2<float>.Zero, Point2<float>.One));
             var ratio = (float)Program.Width / Program.Height;
@@ -43,7 +43,7 @@ namespace pbrt
                 new Bounds2<float>(new Point2<float>(-ratio, -1), new Point2<float>(ratio, 1)),
                 0, 0, film);
 
-            return new WhittedIntegrator(camera, new PixelSampler(1, 0));
+            return new WhittedIntegrator(camera, new PixelSampler(1, 0), depth);
         }
     }
 }

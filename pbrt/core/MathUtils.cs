@@ -6,6 +6,8 @@ namespace pbrt.core
     {
         public static float Pi => (float)Math.PI;
         public static float InvPi => (float)(1.0f / Math.PI);
+        public static float PiOver2 => (float)(Math.PI / 2.0f);
+        public static float PiOver4 => (float)(Math.PI / 4.0f);
 
         public static float Clamp(float x, float min, float max)
         {

@@ -27,18 +27,43 @@ namespace pbrt
             return new Scene(new PrimitiveList(primitives), lights);
         }
 
-        public static Scene Mirrors()
+        public static Scene ManySpheres()
         {
-            var primitives = new List<Primitive>()
-            {
-                new GeometricPrimitive(new Sphere(Transform.Identity, 0.1f), new MatteMaterial(new Spectrum(40, 40, 40), 0)),
-                new GeometricPrimitive(new Sphere(Transform.Translate(-1,0,0), 0.25f), new MirrorMaterial(new Spectrum(40, 40, 40))),
-                new GeometricPrimitive(new Sphere(Transform.Translate(+1,0,0), 0.25f), new MirrorMaterial(new Spectrum(40, 40, 40)))
-            };
+            var primitives = new List<Primitive>();
+
+            for (var z = -2; z < 3; ++z)
+                for (var x = -2; x < 3; ++x)
+                    primitives.Add(new GeometricPrimitive(new Sphere(Transform.Translate(x * 0.25f, 0, z * 0.25f), 0.1f), new MatteMaterial(new Spectrum(40, 40, 40), 0)));
 
             var lights = new List<Light>()
             {
                 new PointLight(Transform.Translate(0, 3, -2), new Spectrum(30))
+            };
+
+            return new Scene(new PrimitiveList(primitives), lights);
+        }
+
+        public static Scene Mirrors()
+        {
+            var primitives = new List<Primitive>()
+            {
+                new GeometricPrimitive(new Sphere(Transform.Identity, 0.5f), new MirrorMaterial(new Spectrum(40))),
+
+                new GeometricPrimitive(new Sphere(Transform.Translate(1, 0, 0), 0.25f), new MatteMaterial(new Spectrum(40, 0, 0), 0)),
+                new GeometricPrimitive(new Sphere(Transform.Translate(-1, 0, 0), 0.25f), new MatteMaterial(new Spectrum(0, 40, 0), 0)),
+                new GeometricPrimitive(new Sphere(Transform.Translate(0, 1, 0), 0.25f), new MatteMaterial(new Spectrum(0, 0, 40), 0)),
+                new GeometricPrimitive(new Sphere(Transform.Translate(0, -1, 0), 0.25f), new MatteMaterial(new Spectrum(40, 40, 40), 0)),
+
+                new GeometricPrimitive(new Sphere(Transform.Translate(-0.7f, 0.7f, 0), 0.15f), new MirrorMaterial(new Spectrum(40))),
+                new GeometricPrimitive(new Sphere(Transform.Translate(0.7f, 0.7f, 0), 0.15f), new MirrorMaterial(new Spectrum(40))),
+                new GeometricPrimitive(new Sphere(Transform.Translate(-0.7f, -0.7f, 0), 0.15f), new MirrorMaterial(new Spectrum(40))),
+                new GeometricPrimitive(new Sphere(Transform.Translate(0.7f, -0.7f, 0), 0.15f), new MirrorMaterial(new Spectrum(40)))
+            };
+
+            var lights = new List<Light>()
+            {
+                new PointLight(Transform.Translate(5, 5, -5), new Spectrum(50)),
+                new PointLight(Transform.Translate(-3, -3, -3), new Spectrum(30)),
             };
 
             return new Scene(new PrimitiveList(primitives), lights);

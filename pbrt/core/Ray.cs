@@ -38,6 +38,11 @@ namespace pbrt
         {
             return O + D * t;
         }
+
+        public RayDifferential ToDiff()
+        {
+            return new RayDifferential(O, D, Tmax, Time);
+        }
     }
 
     public class RayDifferential : Ray
