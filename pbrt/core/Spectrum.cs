@@ -2,7 +2,7 @@
 
 namespace pbrt.core
 {
-    public class Spectrum
+    public struct Spectrum
     {
         public float R { get; private set; }
         public float G { get; private set; }
@@ -10,10 +10,6 @@ namespace pbrt.core
 
         public static Spectrum Zero => new Spectrum(0);
         public static Spectrum White => new Spectrum(1);
-
-        public Spectrum()
-        {
-        }
 
         public Spectrum(float x)
         {
@@ -63,6 +59,11 @@ namespace pbrt.core
         public static Spectrum operator *(Spectrum a, float s)
         {
             return new Spectrum(a.R * s, a.G * s, a.B * s);
+        }
+
+        public static Spectrum operator /(Spectrum a, float s)
+        {
+            return new Spectrum(a.R / s, a.G / s, a.B / s);
         }
     }
 }

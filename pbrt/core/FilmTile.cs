@@ -1,4 +1,5 @@
 ﻿using pbrt.core.geometry;
+using static pbrt.core.Film;
 
 namespace pbrt.core
 {
@@ -9,14 +10,7 @@ namespace pbrt.core
         private Vector2<float> filterRadius, invFilterRadius;
         private float[] filterTable;
 
-        public struct FilmTilePixel
-        {
-            public Spectrum color; // TODO temp
-            //public Spectrum contribSum ;
-            public float filterWeightSum;
-        }
-
-        private FilmTilePixel[] pixels;
+        private Pixel[] pixels;
 
         public FilmTile(Bounds2<int> pixelBounds, Vector2<float> filterRadius, float[] filterTable)
         {
@@ -25,7 +19,7 @@ namespace pbrt.core
             this.invFilterRadius = new Vector2<float>(1.0f / filterRadius.X, 1.0f / filterRadius.Y);
             this.filterTable = filterTable;
 
-            pixels = new FilmTilePixel[(int)pixelBounds.Width() * (int)pixelBounds.Height()];
+            pixels = new Pixel[(int)pixelBounds.Width() * (int)pixelBounds.Height()];
         }
 
         public override string ToString()
@@ -33,13 +27,15 @@ namespace pbrt.core
             return pixelBounds.ToString();
         }
 
-        public void AddSample(Point2<float> posFilm, Spectrum color, float sampleWeight = 1.0f)
+        public void AddSample(Point2<float> posFilm, Spectrum contrib, float sampleWeight = 1.0f)
         {
             var posTile = posFilm.ToInt() - pixelBounds.Min;
-            pixels[posTile.Y * (int)pixelBounds.Width() + posTile.X].color = color;
+            var tileOffset = posTile.Y * (int)pixelBounds.Width() + posTile.X;
+            pixels[tileOffset].contribSum = contrib;
+            pixels[tileOffset].filterWeightSum = 1 * sampleWeight; // TODO add filter weight when implementing filters
         }
 
-        public FilmTilePixel GetPixel(Point2<int> posFilm)
+        public Pixel GetPixel(Point2<int> posFilm)
         {
             var x = posFilm.X - pixelBounds.Min.X;
             var y = posFilm.Y - pixelBounds.Min.Y;

@@ -1,0 +1,114 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{DBEE4776-B059-4670-AE10-398051007B46}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>pbrt</RootNamespace>
+    <AssemblyName>pbrt</AssemblyName>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="OpenTK, Version=2.0.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
+      <HintPath>..\packages\OpenTK.2.0.0\lib\net20\OpenTK.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="bxdfs\MicrofacetReflection.cs" />
+    <Compile Include="bxdfs\OrenNayar.cs" />
+    <Compile Include="bxdfs\LambertianReflection.cs" />
+    <Compile Include="bxdfs\SpecularReflection.cs" />
+    <Compile Include="core\BSDF.cs" />
+    <Compile Include="core\BxDF.cs" />
+    <Compile Include="core\Fresnel.cs" />
+    <Compile Include="core\geometry\Bounds.cs" />
+    <Compile Include="core\geometry\Normal.cs" />
+    <Compile Include="core\geometry\Point.cs" />
+    <Compile Include="core\Light.cs" />
+    <Compile Include="core\geometry\Vector.cs" />
+    <Compile Include="core\Material.cs" />
+    <Compile Include="core\MathUtils.cs" />
+    <Compile Include="core\MicrofacetDistribution.cs" />
+    <Compile Include="core\PrimitiveList.cs" />
+    <Compile Include="core\Aggregate.cs" />
+    <Compile Include="core\GeometricPrimitive.cs" />
+    <Compile Include="core\Primitive.cs" />
+    <Compile Include="core\geometry\Transform.cs" />
+    <Compile Include="cameras\OrthographicCamera.cs" />
+    <Compile Include="cameras\ProjectiveCamera.cs" />
+    <Compile Include="core\FilmTile.cs" />
+    <Compile Include="core\Film.cs" />
+    <Compile Include="core\Filter.cs" />
+    <Compile Include="core\Sampler.cs" />
+    <Compile Include="core\Camera.cs" />
+    <Compile Include="core\Spectrum.cs" />
+    <Compile Include="filters\GaussianFilter.cs" />
+    <Compile Include="filters\TriangleFilter.cs" />
+    <Compile Include="filters\BoxFilter.cs" />
+    <Compile Include="integrators\DepthIntegrator.cs" />
+    <Compile Include="integrators\DummyIntegrator.cs" />
+    <Compile Include="lights\PointLight.cs" />
+    <Compile Include="materials\MirrorMaterial.cs" />
+    <Compile Include="materials\PlasticMaterial.cs" />
+    <Compile Include="materials\MatteMaterial.cs" />
+    <Compile Include="samplers\RandomSampler.cs" />
+    <Compile Include="tests\Scenes.cs" />
+    <Compile Include="tests\Setups.cs" />
+    <Compile Include="Window.cs" />
+    <Compile Include="samplers\StratifiedSampler.cs" />
+    <Compile Include="samplers\GlobalSampler.cs" />
+    <Compile Include="samplers\PixelSampler.cs" />
+    <Compile Include="shapes\Sphere.cs" />
+    <Compile Include="core\Interaction.cs" />
+    <Compile Include="core\Shape.cs" />
+    <Compile Include="core\SurfaceInteraction.cs" />
+    <Compile Include="integrators\SamplerIntegrator.cs" />
+    <Compile Include="core\Integrator.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="core\Ray.cs" />
+    <Compile Include="core\Scene.cs" />
+    <Compile Include="integrators\WhittedIntegrator.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="OpenTK.dll.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

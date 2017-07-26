@@ -109,6 +109,11 @@ namespace pbrt.core.geometry
             return (float)Math.Sqrt(LengthSquared());
         }
 
+        public float Dot(Vector3<T> v)
+        {
+            return (dynamic)X * v.X + (dynamic)Y * v.Y + (dynamic)Z * v.Z;
+        }
+
         public static float Dot(Vector3<T> a, Vector3<T> b)
         {
             return (dynamic)a.X * b.X + (dynamic)a.Y * b.Y + (dynamic)a.Z * b.Z;

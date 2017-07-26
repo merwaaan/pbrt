@@ -43,27 +43,30 @@ namespace pbrt
             return new Scene(new PrimitiveList(primitives), lights);
         }
 
-        public static Scene Mirrors()
+        public static Scene SpheresReflection()
         {
+            var roughness = 0.15f; // tmp roughness, should be remapped
+
             var primitives = new List<Primitive>()
             {
-                new GeometricPrimitive(new Sphere(Transform.Identity, 0.5f), new MirrorMaterial(new Spectrum(40))),
+                //new GeometricPrimitive(new Sphere(Transform.Identity, 0.5f), new PlasticMaterial(new Spectrum(1), new Spectrum(1), roughness)),
+                new GeometricPrimitive(new Sphere(Transform.Identity, 0.5f), new MirrorMaterial(new Spectrum(1))),
 
-                new GeometricPrimitive(new Sphere(Transform.Translate(1, 0, 0), 0.25f), new MatteMaterial(new Spectrum(40, 0, 0), 0)),
-                new GeometricPrimitive(new Sphere(Transform.Translate(-1, 0, 0), 0.25f), new MatteMaterial(new Spectrum(0, 40, 0), 0)),
-                new GeometricPrimitive(new Sphere(Transform.Translate(0, 1, 0), 0.25f), new MatteMaterial(new Spectrum(0, 0, 40), 0)),
-                new GeometricPrimitive(new Sphere(Transform.Translate(0, -1, 0), 0.25f), new MatteMaterial(new Spectrum(40, 40, 40), 0)),
+                new GeometricPrimitive(new Sphere(Transform.Translate(1, 0, 0), 0.25f), new MatteMaterial(new Spectrum(1, 0, 0), 0)),
+                new GeometricPrimitive(new Sphere(Transform.Translate(-1, 0, 0), 0.25f), new MatteMaterial(new Spectrum(0, 1, 0), 0)),
+                new GeometricPrimitive(new Sphere(Transform.Translate(0, 1, 0), 0.25f), new MatteMaterial(new Spectrum(0, 0, 1), 0)),
+                new GeometricPrimitive(new Sphere(Transform.Translate(0, -1, 0), 0.25f), new MatteMaterial(new Spectrum(1, 1, 0), 0)),
 
-                new GeometricPrimitive(new Sphere(Transform.Translate(-0.7f, 0.7f, 0), 0.15f), new MirrorMaterial(new Spectrum(40))),
-                new GeometricPrimitive(new Sphere(Transform.Translate(0.7f, 0.7f, 0), 0.15f), new MirrorMaterial(new Spectrum(40))),
-                new GeometricPrimitive(new Sphere(Transform.Translate(-0.7f, -0.7f, 0), 0.15f), new MirrorMaterial(new Spectrum(40))),
-                new GeometricPrimitive(new Sphere(Transform.Translate(0.7f, -0.7f, 0), 0.15f), new MirrorMaterial(new Spectrum(40)))
+                new GeometricPrimitive(new Sphere(Transform.Translate(-0.7f, 0.7f, 0), 0.15f), new PlasticMaterial(new Spectrum(1), new Spectrum(1), roughness)),
+                new GeometricPrimitive(new Sphere(Transform.Translate(0.7f, 0.7f, 0), 0.15f), new PlasticMaterial(new Spectrum(1), new Spectrum(1), roughness)),
+                new GeometricPrimitive(new Sphere(Transform.Translate(-0.7f, -0.7f, 0), 0.15f), new PlasticMaterial(new Spectrum(1), new Spectrum(1), roughness)),
+                new GeometricPrimitive(new Sphere(Transform.Translate(0.7f, -0.7f, 0), 0.15f), new PlasticMaterial(new Spectrum(1), new Spectrum(1), roughness))
             };
 
             var lights = new List<Light>()
             {
-                new PointLight(Transform.Translate(5, 5, -5), new Spectrum(50)),
-                new PointLight(Transform.Translate(-3, -3, -3), new Spectrum(30)),
+                new PointLight(Transform.Translate(1, 1, -5), new Spectrum(25)),
+                new PointLight(Transform.Translate(-3, -3, 3), new Spectrum(10)),
             };
 
             return new Scene(new PrimitiveList(primitives), lights);

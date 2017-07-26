@@ -116,16 +116,38 @@ namespace pbrt.core
             return Math.Max(0, 1 - Cos2Theta(w));
         }
 
+        public static float TanTheta(Vector3<float> w)
+        {
+            return SinTheta(w) / CosTheta(w);
+        }
+
+        public static float Tan2Theta(Vector3<float> w)
+        {
+            return Sin2Theta(w) / Cos2Theta(w);
+        }
+
         public static float CosPhi(Vector3<float> w)
         {
             var sinTheta = SinTheta(w);
             return sinTheta == 0 ? 1 : MathUtils.Clamp(w.X / sinTheta, -1, 1);
         }
 
+        public static float Cos2Phi(Vector3<float> w)
+        {
+            var cosPhi = CosPhi(w);
+            return cosPhi * cosPhi;
+        }
+
         public static float SinPhi(Vector3<float> w)
         {
             var sinTheta = SinTheta(w);
             return sinTheta == 0 ? 0 : MathUtils.Clamp(w.Y / sinTheta, -1, 1);
+        }
+
+        public static float Sin2Phi(Vector3<float> w)
+        {
+            var sinPhi = SinPhi(w);
+            return sinPhi * sinPhi;
         }
     }
 }

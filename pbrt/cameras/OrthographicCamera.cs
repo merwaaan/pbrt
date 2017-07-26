@@ -12,8 +12,8 @@ namespace pbrt.cameras
             float shutterOpen, float shutterClose, Film film)
             : base(cameraToWorld, Orthographic(0, 1), screenWindow, shutterOpen, shutterClose, film)
         {
-            dxCamera = CameraToScreen * new Vector3<float>(1, 0, 0);
-            dyCamera = CameraToScreen * new Vector3<float>(0, 1, 0);
+            dxCamera = RasterToCamera * new Vector3<float>(1, 0, 0);
+            dyCamera = RasterToCamera * new Vector3<float>(0, 1, 0);
         }
 
         private static Transform Orthographic(float zNear, float zFar)

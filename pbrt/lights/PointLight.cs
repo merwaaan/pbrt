@@ -28,7 +28,7 @@ namespace pbrt.lights
             pdf = 1.0f;
             visTester = new VisibilityTester(inter, new SurfaceInteraction(position));
 
-            return intensity * (1.0f / lightToPoint.LengthSquared());
+            return intensity / lightToPoint.LengthSquared();
         }
     }
 }

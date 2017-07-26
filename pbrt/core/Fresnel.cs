@@ -51,6 +51,12 @@ namespace pbrt.core
         // Indices of refraction
         public float EtaI, EtaT;
 
+        public FresnelDielectric(float etaI, float etaT)
+        {
+            EtaI = etaI;
+            EtaT = etaT;
+        }
+
         public override Spectrum Evaluate(float cosThetaI)
         {
             return FrDielectric(Math.Abs(cosThetaI), EtaI, EtaT);

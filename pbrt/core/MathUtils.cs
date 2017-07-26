@@ -11,7 +11,7 @@ namespace pbrt.core
 
         public static float Clamp(float x, float min, float max)
         {
-            return (float)(Math.Max(0, Math.Min(1, x)));
+            return (float)(Math.Max(min, Math.Min(max, x)));
         }
 
         public static float Radians(float deg)

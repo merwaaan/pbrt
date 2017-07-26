@@ -75,7 +75,7 @@ namespace pbrt.shapes
             var hitPhi = Math.Atan2(hitPos.Y, hitPos.X); // Transform the hit point to polar coordinates
             if (hitPhi < 0) hitPhi += 2 * Math.PI;
             var u = hitPhi / (2 * Math.PI);
-            var theta = Math.Acos(hitPos.Z / Radius); // TODO clamp?
+            var theta = Math.Acos((hitPos.Z / Radius));
             var v = theta / Math.PI;
 
             var zRadius = (float)Math.Sqrt(hitPos.X * hitPos.X + hitPos.Y * hitPos.Y);
@@ -83,7 +83,7 @@ namespace pbrt.shapes
             var cosPhi = hitPos.X * invZRadius;
             var sinPhi = hitPos.Y * invZRadius;
             var dpdu = new Vector3<float>(-2.0f * (float)Math.PI * hitPos.Y, 2.0f * (float)Math.PI * hitPos.X, 0);
-            var dpdv = new Vector3<float>(hitPos.Z * cosPhi, hitPos.Z * sinPhi, -Radius * (float)Math.Sin(theta));
+            var dpdv = new Vector3<float>(hitPos.Z * cosPhi, hitPos.Z * sinPhi, -Radius * (float)Math.Sin(theta)) * -MathUtils.Pi;
 
             inter = ObjectToWorld * new SurfaceInteraction(
                 hitPos, Vector3<float>.Zero, Point2<float>.Zero, -ray.D,

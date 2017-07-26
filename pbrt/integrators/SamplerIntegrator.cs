@@ -2,6 +2,7 @@
 using pbrt.core;
 using pbrt.core.geometry;
 using System;
+using System.Diagnostics;
 using System.Threading.Tasks;
 
 namespace pbrt.integrators

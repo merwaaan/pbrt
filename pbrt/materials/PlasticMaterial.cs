@@ -5,31 +5,31 @@ namespace pbrt.materials
 {
     class PlasticMaterial : Material
     {
-        private readonly Spectrum Diffuse;
-        private readonly Spectrum Specular;
-        private readonly float Roughness;
+        private readonly Spectrum diffuse;
+        private readonly Spectrum specular;
+        private readonly float roughness;
 
-        public PlasticMaterial(Spectrum diffuse, Spectrum specular, float roughness)
+        public PlasticMaterial(Spectrum d, Spectrum s, float r)
         {
-            Diffuse = diffuse;
-            Specular = specular;
-            Roughness = roughness;
+            diffuse = d;
+            specular = s;
+            roughness = r;
         }
 
         public void ComputeScatteringFunctions(SurfaceInteraction inter, bool allowMultipleLobes)
         {
             inter.Bsdf = new BSDF(inter);
 
-            if (!Diffuse.IsBlack())
+            if (!diffuse.IsBlack())
             {
-                inter.Bsdf.Add(new LambertianReflection(Diffuse));
+                inter.Bsdf.Add(new LambertianReflection(diffuse));
             }
 
-            if (!Specular.IsBlack())
+            if (!specular.IsBlack())
             {
-                /*var fresnel = new FresnelDielectric(1.0f, 1.5f);
-                var distribution = new TrowbridgeReitzDistribution(Roughness, Roughness);
-                inter.Bsdf.Add(new MicrofacetsReflection(Specular, distribution, fresnel));*/
+                var fresnel = new FresnelDielectric(1.5f, 1.0f);
+                var distribution = new TrowbridgeReitzDistribution(roughness);
+                inter.Bsdf.Add(new MicrofacetReflection(specular, distribution, fresnel));
             }
         }
     }

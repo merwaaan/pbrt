@@ -1,6 +1,6 @@
-﻿using OpenTK.Graphics;
-using pbrt.core.geometry;
+﻿using pbrt.core.geometry;
 using System;
+using System.Diagnostics;
 
 namespace pbrt.core
 {
@@ -15,10 +15,11 @@ namespace pbrt.core
         /*Filter Filter;
         const int filterTableWidth = 16;
         float[] filterTable = new float[filterTableWidth * filterTableWidth];*/
-
-        private struct Pixel
+        
+        public struct Pixel
         {
-            public float x, y, z;
+            public Spectrum contribSum;
+            public float filterWeightSum;
         }
 
         private Pixel[] pixels;
@@ -74,12 +75,11 @@ namespace pbrt.core
             return new FilmTile(tilePixelBounds, /*Filter.Radius*/Vector2<float>.Zero, null/*filterTable*/);
         }
 
-        public Color4 GetPixel(Point2<int> posFilm)
+        public Pixel GetPixel(Point2<int> posFilm)
         {
             var x = posFilm.X - croppedPixelsBounds.Min.X;
             var y = posFilm.Y - croppedPixelsBounds.Min.Y;
-            var pixel = pixels[y * (int)croppedPixelsBounds.Width() + x];
-            return new Color4(pixel.x, pixel.y, pixel.z, 1.0f);
+            return pixels[y * (int)croppedPixelsBounds.Width() + x];
         }
 
         public void MergeTile(FilmTile tile)
@@ -87,12 +87,11 @@ namespace pbrt.core
             foreach (var pixel in tile.pixelBounds.IteratePoints())
             {
                 var tilePixel = tile.GetPixel(pixel);
-                var color = tilePixel.color * (1/50.0f);
+                var color = tilePixel.contribSum / tilePixel.filterWeightSum;
 
                 var offset = pixel.Y * (int)croppedPixelsBounds.Width() + pixel.X;
-                pixels[offset].x = color.R;
-                pixels[offset].y = color.G;
-                pixels[offset].z = color.B;
+                pixels[offset].contribSum += tilePixel.contribSum;
+                pixels[offset].filterWeightSum += tilePixel.filterWeightSum;
             }
         }
     }

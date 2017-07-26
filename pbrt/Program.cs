@@ -18,9 +18,9 @@ namespace pbrt
             //Do(Setups.Depth(), Scenes.Spheres());
             //Do(Setups.Whitted(), Scenes.Spheres());
             //Do(Setups.Whitted(), Scenes.ManySpheres());
-            Do(Setups.Whitted(1), Scenes.Mirrors());
-            Do(Setups.Whitted(2), Scenes.Mirrors());
-            Do(Setups.Whitted(3), Scenes.Mirrors());
+            //Do(Setups.Whitted(1), Scenes.SpheresReflection());
+            //Do(Setups.Whitted(2), Scenes.SpheresReflection());
+            Do(Setups.Whitted(100), Scenes.SpheresReflection());
 
             Console.Read();
         }

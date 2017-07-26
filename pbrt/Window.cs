@@ -4,6 +4,7 @@ using OpenTK.Graphics.OpenGL;
 using pbrt.core;
 using pbrt.core.geometry;
 using System;
+using System.Diagnostics;
 using System.Threading.Tasks;
 
 namespace pbrt
@@ -97,11 +98,12 @@ namespace pbrt
             foreach (var posFilm in tileBounds.IteratePoints())
             {
                 var pixel = film.GetPixel(posFilm);
+                var color = pixel.contribSum / pixel.filterWeightSum;
 
-                var offset = (int)(posFilm.Y * Width + posFilm.X) * 4;
-                bitmap[offset + 0] = (byte)(pixel.B * 255);
-                bitmap[offset + 1] = (byte)(pixel.G * 255);
-                bitmap[offset + 2] = (byte)(pixel.R * 255);
+                var offset = (posFilm.Y * Width + posFilm.X) * 4; // BGRA
+                bitmap[offset + 0] = (byte)Math.Min(255, color.B * 255);
+                bitmap[offset + 1] = (byte)Math.Min(255, color.G * 255);
+                bitmap[offset + 2] = (byte)Math.Min(255, color.R * 255);
             }
         }
     }
