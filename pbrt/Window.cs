@@ -29,7 +29,7 @@ namespace pbrt
             this.scene = scene;
 
             bitmap = new byte[Width * Height * 4];
-                        
+
             // Setup the output texture
             texture = GL.GenTexture();
             GL.BindTexture(TextureTarget.Texture2D, texture);
@@ -43,7 +43,7 @@ namespace pbrt
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
-            
+
             // Start rendering
             Task.Factory.StartNew(() => integrator.Render(scene, this));
         }
@@ -82,29 +82,32 @@ namespace pbrt
         {
             for (var y = tileBounds.Min.Y; y < tileBounds.Max.Y; ++y)
                 for (var x = tileBounds.Min.X; x < tileBounds.Max.X; ++x)
-                    bitmap[(y * Width + x) * 4] = 0xFF;
+                    if (x >= 0 && x < Program.Width && y >= 0 && y < Program.Height)
+                        bitmap[(y * Width + x) * 4 + 1] = 0xFF;
         }
 
         public void UnmarkTile(Bounds2<int> tileBounds)
         {
             for (var y = tileBounds.Min.Y; y < tileBounds.Max.Y; ++y)
                 for (var x = tileBounds.Min.X; x < tileBounds.Max.X; ++x)
-                    bitmap[(y * Width + x) * 4] = 0;
+                    if (x >= 0 && x < Program.Width && y >= 0 && y < Program.Height)
+                        bitmap[(y * Width + x) * 4 + 1] = 0;
         }
 
         // Update the texture with a portion of the given film.
         public void UpdateTileFromFilm(Bounds2<int> tileBounds, Film film)
         {
             foreach (var posFilm in tileBounds.IteratePoints())
-            {
-                var pixel = film.GetPixel(posFilm);
-                var color = pixel.contribSum / pixel.filterWeightSum;
+                if (posFilm.X >= 0 && posFilm.X < Program.Width && posFilm.Y >= 0 && posFilm.Y < Program.Height)
+                {
+                    var pixel = film.GetPixel(posFilm);
+                    var color = pixel.contribSum / pixel.filterWeightSum;
 
-                var offset = (posFilm.Y * Width + posFilm.X) * 4; // BGRA
-                bitmap[offset + 0] = (byte)Math.Min(255, color.B * 255);
-                bitmap[offset + 1] = (byte)Math.Min(255, color.G * 255);
-                bitmap[offset + 2] = (byte)Math.Min(255, color.R * 255);
-            }
+                    var offset = (posFilm.Y * Width + posFilm.X) * 4; // BGRA
+                    bitmap[offset + 0] = (byte)Math.Min(255, color.B * 255);
+                    bitmap[offset + 1] = (byte)Math.Min(255, color.G * 255);
+                    bitmap[offset + 2] = (byte)Math.Min(255, color.R * 255);
+                }
         }
     }
 }

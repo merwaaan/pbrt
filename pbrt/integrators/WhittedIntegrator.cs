@@ -91,7 +91,7 @@ namespace pbrt.integrators
 
         public override string ToString()
         {
-            return $"Whitted (depth: {maxDepth})";
+            return $"Whitted (depth {maxDepth}, samples {Sampler.SamplesPerPixel}), Filter ${Camera.Film.Filter}";
         }
     }
 }

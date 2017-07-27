@@ -50,6 +50,11 @@ namespace pbrt.core.geometry
         {
             return (float)Math.Sqrt(LengthSquared());
         }
+
+        public override string ToString()
+        {
+            return $"({X}, {Y})";
+        }
     }
 
     public class Vector3<T>
@@ -57,6 +62,20 @@ namespace pbrt.core.geometry
         public T X;
         public T Y;
         public T Z;
+
+        public T this[int index]
+        {
+            get
+            {
+                switch(index)
+                {
+                    case 0: return X;
+                    case 1: return Y;
+                    case 2: return Z;
+                    default: throw new IndexOutOfRangeException();
+                }
+            }
+        }
 
         public static Vector3<T> Zero => new Vector3<T>((dynamic)0, (dynamic)0, (dynamic)0);
         public static Vector3<T> One => new Vector3<T>((dynamic)1, (dynamic)1, (dynamic)1);
@@ -151,6 +170,11 @@ namespace pbrt.core.geometry
         public Vector3<T> Negated()
         {
             return new Vector3<T>((dynamic)X * -1, (dynamic)Y * -1, (dynamic)Z * -1);
+        }
+
+        public override string ToString()
+        {
+            return $"({X}, {Y}, {Z})";
         }
     }
 }

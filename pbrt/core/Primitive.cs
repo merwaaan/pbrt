@@ -7,7 +7,7 @@ namespace pbrt.core
         //public BSDF Bsdf;
         //public BSSRDF BSSRDF;
 
-        public abstract Bounds3<float> WorldBounds();
+        public abstract Bounds3<float> WorldBounds { get; }
 
         //public abstract AreaLight GetAreaLight();
         //public abstract Material GetMaterial();

@@ -13,5 +13,10 @@ namespace pbrt.core
         }
 
         public abstract float Evaluate(Point2<float> point);
+
+        public override string ToString()
+        {
+            return $"{GetType().Name} (radius {Radius})";
+        }
     }
 }

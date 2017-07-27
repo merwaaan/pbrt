@@ -14,10 +14,5 @@ namespace pbrt.core
         {
             throw new NotImplementedException();
         }
-
-        public override Bounds3<float> WorldBounds()
-        {
-            throw new NotImplementedException();
-        }
     }
 }

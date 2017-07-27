@@ -24,7 +24,7 @@ namespace pbrt.core
 
         public bool Matches(BxDFType type)
         {
-            return (Type & type) > 0;
+            return (Type & type) == Type;
         }
 
         // Computes the distribution for the given pair of directions
@@ -33,46 +33,15 @@ namespace pbrt.core
         // Sample an incoming direction for the given outgoing direction
         public virtual Spectrum Sample_f(Vector3<float> wo, out Vector3<float> wi, Point2<float> sample, out float pdf, out BxDFType type)
         {
-            wi = CosineSampleHemisphere(sample);
+            wi = MathUtils.CosineSampleHemisphere(sample);
 
             if (wo.Z < 0)
                 wi.Z *= -1;
 
-            pdf = 0;// TODO !SameHemisphere(wo, wi) ? AbsCosTheta(wi) * MathUtils.InvPi : 0;
+            pdf = MathUtils.SameHemisphere(wo, wi) ? AbsCosTheta(wi) * MathUtils.InvPi : 0; // TODO reverted?
             type = 0;
 
             return f(wo, wi);
-        }
-
-        // TODO move to sampling
-        public static Vector3<float> CosineSampleHemisphere(Point2<float> u)
-        {
-            var d = ConcentricSampleDisk(u);
-            var z = (float)Math.Sqrt(Math.Max(0, 1 - d.X * d.X - d.Y * d.Y));
-            return new Vector3<float>(d.X, d.Y, z);
-        }
-
-        public static Point2<float> ConcentricSampleDisk(Point2<float> u)
-        {
-            // Map uniform random numbers to $[-1,1]^2$
-            var uOffset = u * 2.0f - Point2<float>.One;
-
-            // Handle degeneracy at the origin
-            if (uOffset.X == 0 && uOffset.Y == 0) return new Point2<float>(0, 0);
-
-            // Apply concentric mapping to point
-            float theta, r;
-            if (Math.Abs(uOffset.X) > Math.Abs(uOffset.Y))
-            {
-                r = uOffset.X;
-                theta = MathUtils.PiOver4 * (uOffset.Y / uOffset.X);
-            }
-            else
-            {
-                r = uOffset.Y;
-                theta = MathUtils.PiOver2 - MathUtils.PiOver4 * (uOffset.X / uOffset.Y);
-            }
-            return new Point2<float>((float)Math.Cos(theta), (float)Math.Sin(theta)) * r;
         }
 
         // Hemispherical-directional reflectance: total reflection in the given direction

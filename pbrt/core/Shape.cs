@@ -17,7 +17,7 @@ namespace pbrt.core
 
         public virtual Bounds3<float> WorldBounds()
         {
-            return /*ObjectToWorld **/ ObjectBounds();
+            return ObjectToWorld * ObjectBounds();
         }
 
         public abstract bool Intersect(Ray ray, out float t, out SurfaceInteraction inter);

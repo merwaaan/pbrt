@@ -112,10 +112,10 @@ namespace pbrt.core.geometry
         {
             float x = p.X, y = p.Y, z = p.Z;
 
-            float px = t.M.M11 * x + t.M.M12 * y + t.M.M13 * z +t.M.M14;
-            float py = t.M.M21 * x + t.M.M22 * y + t.M.M23 * z +t.M.M24;
-            float pz = t.M.M31 * x + t.M.M32 * y + t.M.M33 * z +t.M.M34;
-            float pw = t.M.M41 * x + t.M.M42 * y + t.M.M43 * z +t.M.M44;
+            float px = t.M.M11 * x + t.M.M12 * y + t.M.M13 * z + t.M.M14;
+            float py = t.M.M21 * x + t.M.M22 * y + t.M.M23 * z + t.M.M24;
+            float pz = t.M.M31 * x + t.M.M32 * y + t.M.M33 * z + t.M.M34;
+            float pw = t.M.M41 * x + t.M.M42 * y + t.M.M43 * z + t.M.M44;
 
             if (pw == 1)
                 return new Point3<float>(px, py, pz);
@@ -163,9 +163,17 @@ namespace pbrt.core.geometry
             };
         }
 
-        public static Bounds3<float> operator *(Transform t, Bounds3<float> p)
+        public static Bounds3<float> operator *(Transform t, Bounds3<float> b)
         {
-            return null;
+            var tb = new Bounds3<float>(b.Min);
+            tb = tb.Union(t * new Point3<float>(b.Max.X, b.Min.Y, b.Min.Z));
+            tb = tb.Union(t * new Point3<float>(b.Min.X, b.Max.Y, b.Min.Z));
+            tb = tb.Union(t * new Point3<float>(b.Min.X, b.Min.Y, b.Max.Z));
+            tb = tb.Union(t * new Point3<float>(b.Min.X, b.Max.Y, b.Max.Z));
+            tb = tb.Union(t * new Point3<float>(b.Max.X, b.Max.Y, b.Min.Z));
+            tb = tb.Union(t * new Point3<float>(b.Max.X, b.Min.Y, b.Max.Z));
+            tb = tb.Union(t * new Point3<float>(b.Max.X, b.Max.Y, b.Max.Z));
+            return tb;
         }
 
         public static SurfaceInteraction operator *(Transform t, SurfaceInteraction inter)

@@ -7,6 +7,8 @@ namespace pbrt.core
         public readonly Shape Shape;
         public readonly Material Material;
 
+        public override Bounds3<float> WorldBounds => Shape.WorldBounds();
+
         //private AreaLight areaLight;
         //private MediumInterface medium;
 
@@ -14,11 +16,6 @@ namespace pbrt.core
         {
             Shape = shape;
             Material = material;
-        }
-
-        public override Bounds3<float> WorldBounds()
-        {
-            return Shape.WorldBounds();
         }
 
         public override bool Intersect(Ray ray, out SurfaceInteraction inter)

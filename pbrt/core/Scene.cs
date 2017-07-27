@@ -8,12 +8,11 @@ namespace pbrt.core
         public Primitive Aggregate { get; private set; }
         public List<Light> Lights { get; private set; }
 
-        public Bounds3<float> WorldBounds { get; private set; }
+        public Bounds3<float> WorldBounds => Aggregate.WorldBounds;
 
         public Scene(Primitive aggregate, List<Light> lights)
         {
             Aggregate = aggregate;
-            WorldBounds = aggregate.WorldBounds();
 
             Lights = lights;
             foreach (var light in Lights)

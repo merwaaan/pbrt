@@ -112,22 +112,50 @@ namespace pbrt.core.geometry
             Max = new Point3<T>(Math.Max((dynamic)p1.X, (dynamic)p2.X), Math.Max((dynamic)p1.Y, (dynamic)p2.Y), Math.Max((dynamic)p1.Z, (dynamic)p2.Z));
         }
 
+        public bool IntersectP(Ray ray, out float t0, out float t1)
+        {
+            t0 = 0;
+            t1 = ray.Tmax;
+
+            for (var i = 0; i < 3; ++i)
+            {
+                var invRayDir = 1 / ray.D[i];
+                var tNear = ((dynamic)Min[i] - ray.O[i]) * invRayDir;
+                var tFar = ((dynamic)Max[i] - ray.O[i]) * invRayDir;
+                
+                if (tNear > tFar)
+                {
+                    var tmp = tNear;
+                    tNear = tFar;
+                    tFar = tmp;
+                }
+                
+                t0 = tNear > t0 ? tNear : t0;
+                t1 = tFar < t1 ? tFar : t1;
+
+                if (t0 > t1)
+                    return false;
+            }
+            
+            return true;
+        }
+
         public override string ToString()
         {
             return $"{Min} / {Max}";
         }
 
-        public static Bounds3<T> Union(Bounds3<T> b, Point3<T> p)
+        public Bounds3<T> Union(Point3<T> p)
         {
             return new Bounds3<T>(
                 new Point3<T>(
-                    Math.Min((dynamic)b.Min.X, (dynamic)p.X),
-                    Math.Min((dynamic)b.Min.Y, (dynamic)p.Y),
-                    Math.Min((dynamic)b.Min.Z, (dynamic)p.Z)),
+                    Math.Min((dynamic)Min.X, (dynamic)p.X),
+                    Math.Min((dynamic)Min.Y, (dynamic)p.Y),
+                    Math.Min((dynamic)Min.Z, (dynamic)p.Z)),
                 new Point3<T>(
-                    Math.Max((dynamic)b.Max.X, (dynamic)p.X),
-                    Math.Max((dynamic)b.Max.Y, (dynamic)p.Y),
-                    Math.Max((dynamic)b.Max.Z, (dynamic)p.Z)));
+                    Math.Max((dynamic)Max.X, (dynamic)p.X),
+                    Math.Max((dynamic)Max.Y, (dynamic)p.Y),
+                    Math.Max((dynamic)Max.Z, (dynamic)p.Z)));
         }
 
         public static Bounds3<T> Union(Bounds3<T> b1, Bounds3<T> b2)

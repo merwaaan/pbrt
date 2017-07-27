@@ -51,7 +51,7 @@ namespace pbrt.shapes
             var c = rayObj.O.X * rayObj.O.X + rayObj.O.Y * rayObj.O.Y + rayObj.O.Z * rayObj.O.Z - Radius * Radius;
 
             // Solve the quadration equation for t
-            if (!Quadratic(a, b, c, out float t0, out float t1))
+            if (!MathUtils.Quadratic(a, b, c, out float t0, out float t1))
                 return false;
 
             // Look for the nearest intersection
@@ -89,35 +89,6 @@ namespace pbrt.shapes
                 hitPos, Vector3<float>.Zero, Point2<float>.Zero, -ray.D,
                 dpdu, dpdv, Normal3<float>.Zero, Normal3<float>.Zero,
                 0, this);
-
-            return true;
-        }
-
-        private static bool Quadratic(float a, float b, float c, out float t0, out float t1)
-        {
-            t0 = t1 = 0.0f;
-
-            float delta = b * b - 4 * a * c;
-            if (delta < 0)
-                return false;
-
-            if (delta == 0.0f)
-            {
-                t0 = -b / (2 * a);
-            }
-            else
-            {
-                var sqrt = (float)Math.Sqrt(delta);
-                t0 = (-b + sqrt) / (2 * a);
-                t1 = (-b - sqrt) / (2 * a);
-
-                if (t1 < t0)
-                {
-                    var tmp = t1;
-                    t1 = t0;
-                    t0 = tmp;
-                }
-            }
 
             return true;
         }

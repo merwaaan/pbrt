@@ -42,6 +42,16 @@ namespace pbrt.core.geometry
             return new Point2<T>((T)Math.Ceiling((dynamic)X), (T)Math.Ceiling((dynamic)Y));
         }
 
+        public static Point2<T> Min(Point2<T> a, Point2<T> b)
+        {
+            return new Point2<T>((T)Math.Min((dynamic)a.X, (dynamic)b.X), (T)Math.Min((dynamic)a.Y, (dynamic)b.Y));
+        }
+
+        public static Point2<T> Max(Point2<T> a, Point2<T> b)
+        {
+            return new Point2<T>((T)Math.Max((dynamic)a.X, (dynamic)b.X), (T)Math.Max((dynamic)a.Y, (dynamic)b.Y));
+        }
+
         public static Point2<T> operator +(Point2<T> p1, Point2<T> p2)
         {
             return new Point2<T>((dynamic)p1.X + p2.X, (dynamic)p1.Y + p2.Y);
@@ -73,6 +83,20 @@ namespace pbrt.core.geometry
         public T X;
         public T Y;
         public T Z;
+
+        public T this[int index]
+        {
+            get
+            {
+                switch (index)
+                {
+                    case 0: return X;
+                    case 1: return Y;
+                    case 2: return Z;
+                    default: throw new IndexOutOfRangeException();
+                }
+            }
+        }
 
         public static Point3<T> Zero => new Point3<T>((dynamic)0, (dynamic)0, (dynamic)0);
         public static Point3<T> One => new Point3<T>((dynamic)1, (dynamic)1, (dynamic)1);

@@ -10,7 +10,7 @@ namespace pbrt.bxdfs
         private Fresnel fresnel;
 
         public MicrofacetReflection(Spectrum r, MicrofacetDistribution d, Fresnel f)
-            : base(BxDFType.Reflection | BxDFType.Glossy)
+            : base(BxDFType.Reflection | BxDFType.Specular) // TODO initially Glossy, not sure about the diff
         {
             reflectance = r;
             distribution = d;

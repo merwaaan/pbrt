@@ -63,7 +63,7 @@
     <Compile Include="core\Material.cs" />
     <Compile Include="core\MathUtils.cs" />
     <Compile Include="core\MicrofacetDistribution.cs" />
-    <Compile Include="core\PrimitiveList.cs" />
+    <Compile Include="accelerators\PrimitiveList.cs" />
     <Compile Include="core\Aggregate.cs" />
     <Compile Include="core\GeometricPrimitive.cs" />
     <Compile Include="core\Primitive.cs" />

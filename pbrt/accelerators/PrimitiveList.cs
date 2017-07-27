@@ -10,6 +10,8 @@ namespace pbrt.core
     {
         public List<Primitive> Primitives { get; private set; }
 
+        public override Bounds3<float> WorldBounds => worldBounds;
+
         private Bounds3<float> worldBounds;
 
         public PrimitiveList(IEnumerable<Primitive> primitives)
@@ -19,9 +21,9 @@ namespace pbrt.core
             // Cache the world space bounds
             if (Primitives.Any())
             {
-                worldBounds = Primitives.First().WorldBounds();
+                worldBounds = Primitives.First().WorldBounds;
                 foreach (var p in Primitives.Skip(1))
-                    worldBounds = Bounds3<float>.Union(worldBounds, p.WorldBounds());
+                    worldBounds = Bounds3<float>.Union(worldBounds, p.WorldBounds);
             }
         }
 
@@ -32,7 +34,7 @@ namespace pbrt.core
             inter = null;
 
             foreach (var p in Primitives)
-                if (p.Intersect(ray, out SurfaceInteraction inter2) && ray.Tmax < closestT)
+                if (/*p.WorldBounds.IntersectP(ray, out float t0, out float t1) && */p.Intersect(ray, out SurfaceInteraction inter2) && ray.Tmax < closestT)
                 {
                     hit = true;
                     closestT = ray.Tmax;
@@ -49,11 +51,6 @@ namespace pbrt.core
                     return true;
 
             return false;
-        }
-
-        public override Bounds3<float> WorldBounds()
-        {
-            return worldBounds;
         }
 
         public override void ComputeScatteringFunctions(SurfaceInteraction inter, bool allowMultipleLobes)

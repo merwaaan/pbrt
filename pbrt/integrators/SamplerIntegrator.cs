@@ -1,8 +1,6 @@
-﻿using OpenTK.Graphics;
-using pbrt.core;
+﻿using pbrt.core;
 using pbrt.core.geometry;
 using System;
-using System.Diagnostics;
 using System.Threading.Tasks;
 
 namespace pbrt.integrators
@@ -11,9 +9,7 @@ namespace pbrt.integrators
     {
         protected Sampler Sampler;
         protected Camera Camera;
-
-        const int TileSize = 64;
-
+        
         public SamplerIntegrator(Sampler sampler, Camera camera)
         {
             Sampler = sampler;
@@ -36,13 +32,13 @@ namespace pbrt.integrators
             var sampleExtent = sampleBounds.Diagonal();
 
             var nTiles = new Vector2<int>(
-                (sampleExtent.X + TileSize - 1) / TileSize,
-                (sampleExtent.Y + TileSize - 1) / TileSize);
+                (sampleExtent.X + Program.TileSize - 1) / Program.TileSize,
+                (sampleExtent.Y + Program.TileSize - 1) / Program.TileSize);
 
             // Render tiles in parallel
 
             //Parallel.For(0, nTiles.X * nTiles.Y, tile =>
-            Parallel.For(0, nTiles.X * nTiles.Y, new ParallelOptions { MaxDegreeOfParallelism = 1 }, tile =>
+            Parallel.For(0, nTiles.X * nTiles.Y, new ParallelOptions { MaxDegreeOfParallelism = Program.ThreadCount }, tile =>
             {
                 var tileX = tile % nTiles.X;
                 var tileY = tile / nTiles.X;
@@ -52,10 +48,10 @@ namespace pbrt.integrators
                 var tileSampler = Sampler.Clone(seed);
 
                 // Compute the extent of pixels to be sampled in this tile
-                var x0 = sampleBounds.Min.X + tileX * TileSize;
-                var x1 = Math.Min(x0 + TileSize, sampleBounds.Max.X);
-                var y0 = sampleBounds.Min.Y + tileY * TileSize;
-                var y1 = Math.Min(y0 + TileSize, sampleBounds.Max.Y);
+                var x0 = sampleBounds.Min.X + tileX * Program.TileSize;
+                var x1 = Math.Min(x0 + Program.TileSize, sampleBounds.Max.X);
+                var y0 = sampleBounds.Min.Y + tileY * Program.TileSize;
+                var y1 = Math.Min(y0 + Program.TileSize, sampleBounds.Max.Y);
                 var tileBounds = new Bounds2<int>(new Point2<int>(x0, y0), new Point2<int>(x1, y1));
 
                 var filmTile = Camera.Film.GetTile(tileBounds);

@@ -11,6 +11,11 @@ namespace pbrt.filters
         {
         }
 
+        public TriangleFilter(float radius)
+            : base(new Vector2<float>(radius, radius))
+        {
+        }
+
         public override float Evaluate(Point2<float> point)
         {
             return
