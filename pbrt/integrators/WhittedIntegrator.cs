@@ -7,13 +7,13 @@ namespace pbrt.integrators
     {
         private int maxDepth;
 
-        public WhittedIntegrator(Camera camera, Sampler sampler, int depth = 5)
-            : base(sampler, camera)
+        public WhittedIntegrator(Sampler sampler, int depth = 5)
+            : base(sampler)
         {
             maxDepth = depth;
         }
 
-        public override Spectrum Li(RayDifferential ray, Scene scene, Sampler sampler, int depth = 0)
+        public override Spectrum Li(RayDifferential ray, Scene scene, Camera camera, Sampler sampler, int depth = 0)
         {
             var L = Spectrum.Zero;
 
@@ -60,14 +60,14 @@ namespace pbrt.integrators
             // Recursively trace new rays
             if (depth + 1 < maxDepth)
             {
-                L += SpecularReflect(ray, inter, scene, sampler, depth);
+                L += SpecularReflect(ray, inter, scene, camera, sampler, depth);
                 //L += SpecularTransmit(ray, inter, scene, sampler, depth);
             }
 
             return L;
         }
 
-        private Spectrum SpecularReflect(RayDifferential ray, SurfaceInteraction inter, Scene scene, Sampler sampler, int depth)
+        private Spectrum SpecularReflect(RayDifferential ray, SurfaceInteraction inter, Scene scene, Camera camera, Sampler sampler, int depth)
         {
             // Sample a direction with the BSDF
             var type = BxDF.BxDFType.Reflection | BxDF.BxDFType.Specular;
@@ -83,7 +83,7 @@ namespace pbrt.integrators
                     // TODO
                 }
 
-                return f * Li(newRay, scene, sampler, depth + 1) * Vector3<float>.AbsDot(wi, inter.Shading.N) * (1.0f / pdf);
+                return f * Li(newRay, scene, camera, sampler, depth + 1) * Vector3<float>.AbsDot(wi, inter.Shading.N) * (1.0f / pdf);
             }
 
             return Spectrum.Zero;
@@ -91,7 +91,7 @@ namespace pbrt.integrators
 
         public override string ToString()
         {
-            return $"Whitted (depth {maxDepth}, samples {Sampler.SamplesPerPixel}), Filter ${Camera.Film.Filter}";
+            return $"Whitted (depth {maxDepth}, samples {Sampler.SamplesPerPixel})";
         }
     }
 }

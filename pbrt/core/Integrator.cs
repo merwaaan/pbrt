@@ -2,6 +2,6 @@
 {
     public abstract class Integrator
     {
-        public abstract void Render(Scene scene, Window window = null);
+        public abstract void Render(Scene scene, Camera camera, Window window = null);
     }
 }

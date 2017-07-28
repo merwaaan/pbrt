@@ -51,7 +51,7 @@ namespace pbrt.cameras
             var posFilm = new Point3<float>(sample.PosFilm.X, sample.PosFilm.Y, 0);
             var posCamera = RasterToCamera * posFilm;
 
-            // Create a ray in camera space, directed towards the Z-axis
+            // Create a ray directed towards the camera's Z-axis
             rayDiff = new RayDifferential(posCamera, new Vector3<float>(0, 0, 1));
             rayDiff.RxO = rayDiff.O + dxCamera;
             rayDiff.RyO = rayDiff.O + dyCamera;
@@ -64,6 +64,23 @@ namespace pbrt.cameras
             rayDiff = CameraToWorld * rayDiff;
 
             return 1;
+        }
+
+        public static OrthographicCamera Create(Point3<float> position, float size = 1)
+        {
+            var half = size / 2;
+            var ratio = (float)Program.Width / Program.Height * half;
+
+            var film = new Film(new Point2<int>(Program.Width, Program.Height), Program.CropWindow, Program.Filter);
+
+            return new OrthographicCamera(
+                Transform.LookAt(
+                    position,
+                    new Point3<float>(0, 0, 0),
+                    new Vector3<float>(0, 1, 0)).Inverse(),
+                new Bounds2<float>(new Point2<float>(-ratio, -half), new Point2<float>(ratio, half)),
+                0, 0,
+                film);
         }
     }
 }

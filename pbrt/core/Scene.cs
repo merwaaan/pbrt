@@ -10,11 +10,11 @@ namespace pbrt.core
 
         public Bounds3<float> WorldBounds => Aggregate.WorldBounds;
 
-        public Scene(Primitive aggregate, List<Light> lights)
+        public Scene(Primitive aggregate, IEnumerable<Light> lights)
         {
             Aggregate = aggregate;
 
-            Lights = lights;
+            Lights = new List<Light>(lights);
             foreach (var light in Lights)
                 light.Preprocess();
         }

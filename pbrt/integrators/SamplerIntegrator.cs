@@ -8,27 +8,25 @@ namespace pbrt.integrators
     public abstract class SamplerIntegrator : Integrator
     {
         protected Sampler Sampler;
-        protected Camera Camera;
         
-        public SamplerIntegrator(Sampler sampler, Camera camera)
+        public SamplerIntegrator(Sampler sampler)
         {
             Sampler = sampler;
-            Camera = camera;
         }
 
-        public abstract Spectrum Li(RayDifferential ray, Scene scene, Sampler sampler, int depth = 0);
+        public abstract Spectrum Li(RayDifferential ray, Scene scene, Camera camera, Sampler sampler, int depth = 0);
 
         protected virtual void Preprocess()
         {
         }
 
-        public override void Render(Scene scene, Window window = null)
+        public override void Render(Scene scene, Camera camera, Window window = null)
         {
             Preprocess();
 
             // Compute the number of tiles to use
 
-            var sampleBounds = Camera.Film.GetSampleBounds();
+            var sampleBounds = camera.Film.GetSampleBounds();
             var sampleExtent = sampleBounds.Diagonal();
 
             var nTiles = new Vector2<int>(
@@ -54,7 +52,7 @@ namespace pbrt.integrators
                 var y1 = Math.Min(y0 + Program.TileSize, sampleBounds.Max.Y);
                 var tileBounds = new Bounds2<int>(new Point2<int>(x0, y0), new Point2<int>(x1, y1));
 
-                var filmTile = Camera.Film.GetTile(tileBounds);
+                var filmTile = camera.Film.GetTile(tileBounds);
                 window?.MarkTile(tileBounds);
 
                 // Loop over the pixels in the tile
@@ -66,13 +64,13 @@ namespace pbrt.integrators
                         var cameraSample = tileSampler.GetCameraSample(pixel);
 
                         // Generate a camera ray for the current sample
-                        var rayWeight = Camera.GenerateRayDifferential(cameraSample, out RayDifferential ray);
+                        var rayWeight = camera.GenerateRayDifferential(cameraSample, out RayDifferential ray);
                         ray.ScaleDifferentials((float)(1.0f / Math.Sqrt(tileSampler.SamplesPerPixel)));
 
                         // Evaluate radiance along the camera ray
                         var L = Spectrum.Zero;
                         if (rayWeight > 0)
-                            L = Li(ray, scene, tileSampler);
+                            L = Li(ray, scene, camera, tileSampler);
 
                         // TODO check invalid radiance
 
@@ -83,11 +81,11 @@ namespace pbrt.integrators
                 }
 
                 // Merge the tile into the film
-                Camera.Film.MergeTile(filmTile);
+                camera.Film.MergeTile(filmTile);
 
                 //Thread.Sleep(100);
                 window?.UnmarkTile(tileBounds);
-                window?.UpdateTileFromFilm(tileBounds, Camera.Film);
+                window?.UpdateTileFromFilm(tileBounds, camera.Film);
             });
         }
     }

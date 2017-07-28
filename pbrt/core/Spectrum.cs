@@ -9,7 +9,7 @@ namespace pbrt.core
         public float B { get; private set; }
 
         public static Spectrum Zero => new Spectrum(0);
-        public static Spectrum White => new Spectrum(1);
+        public static Spectrum One => new Spectrum(1);
 
         public Spectrum(float x)
         {

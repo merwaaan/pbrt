@@ -98,6 +98,13 @@ namespace pbrt.core.geometry
             Z = v.Z;
         }
 
+        public Vector3(Point3<T> p)
+        {
+            X = p.X;
+            Y = p.Y;
+            Z = p.Z;
+        }
+
         public static Vector3<T> operator +(Vector3<T> a, Vector3<T> b)
         {
             return new Vector3<T>((dynamic)a.X + b.X, (dynamic)a.Y + b.Y, (dynamic)a.Z + b.Z);

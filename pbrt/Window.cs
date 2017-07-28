@@ -12,7 +12,7 @@ namespace pbrt
     public class Window : GameWindow
     {
         private Integrator integrator;
-        private Scene scene;
+        private SceneDescription sceneDescription;
 
         private static int WindowId;
         private int id;
@@ -20,13 +20,13 @@ namespace pbrt
         private byte[] bitmap;
         private int texture;
 
-        public Window(Integrator integrator, Scene scene)
+        public Window(Integrator integrator, SceneDescription sceneDesc)
             : base(Program.Width, Program.Height, GraphicsMode.Default, $"PBRT - {integrator}",
                   GameWindowFlags.Default, DisplayDevice.Default,
                   3, 0, GraphicsContextFlags.ForwardCompatible)
         {
             this.integrator = integrator;
-            this.scene = scene;
+            this.sceneDescription = sceneDesc;
 
             bitmap = new byte[Width * Height * 4];
 
@@ -45,7 +45,7 @@ namespace pbrt
             base.OnLoad(e);
 
             // Start rendering
-            Task.Factory.StartNew(() => integrator.Render(scene, this));
+            Task.Factory.StartNew(() => integrator.Render(sceneDescription.Scene, sceneDescription.Camera, this));
         }
 
         private static readonly object renderingLock = new object();

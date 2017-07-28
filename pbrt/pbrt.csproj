@@ -52,6 +52,7 @@
     <Compile Include="bxdfs\OrenNayar.cs" />
     <Compile Include="bxdfs\LambertianReflection.cs" />
     <Compile Include="bxdfs\SpecularReflection.cs" />
+    <Compile Include="cameras\PerspectiveCamera.cs" />
     <Compile Include="core\BSDF.cs" />
     <Compile Include="core\BxDF.cs" />
     <Compile Include="core\Fresnel.cs" />
