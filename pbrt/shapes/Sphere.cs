@@ -74,28 +74,39 @@ namespace pbrt.shapes
 
             var hitPhi = Math.Atan2(hitPos.Y, hitPos.X); // Transform the hit point to polar coordinates
             if (hitPhi < 0) hitPhi += 2 * Math.PI;
-            var u = hitPhi / (2 * Math.PI);
-            var theta = Math.Acos((hitPos.Z / Radius));
-            var v = theta / Math.PI;
+            var theta = Math.Acos(MathUtils.Clamp(hitPos.Z / Radius, -1, 1));
+            
+            //var u = hitPhi / (2 * Math.PI);
+            //var v = theta / Math.PI;
 
             var zRadius = (float)Math.Sqrt(hitPos.X * hitPos.X + hitPos.Y * hitPos.Y);
             var invZRadius = 1.0f / zRadius;
             var cosPhi = hitPos.X * invZRadius;
             var sinPhi = hitPos.Y * invZRadius;
-            var dpdu = new Vector3<float>(-2.0f * (float)Math.PI * hitPos.Y, 2.0f * (float)Math.PI * hitPos.X, 0);
+            var dpdu = new Vector3<float>(-MathUtils.TwoPi * hitPos.Y, MathUtils.TwoPi * hitPos.X, 0);
             var dpdv = new Vector3<float>(hitPos.Z * cosPhi, hitPos.Z * sinPhi, -Radius * (float)Math.Sin(theta)) * -MathUtils.Pi;
 
             inter = ObjectToWorld * new SurfaceInteraction(
-                hitPos, Vector3<float>.Zero, Point2<float>.Zero, -ray.D,
+                hitPos, Vector3<float>.Zero, Point2<float>.Zero, -rayObj.D,
                 dpdu, dpdv, Normal3<float>.Zero, Normal3<float>.Zero,
-                0, this);
+                rayObj.Time, this);
 
             return true;
         }
 
         public override float Area()
         {
-            return (float)(4 * Math.PI * Radius * Radius);
+            return 4 * MathUtils.Pi * Radius * Radius;
+        }
+
+        public override Interaction Sample(Point2<float> u)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override Interaction Sample(Interaction inter, Point2<float> u)
+        {
+            throw new NotImplementedException();
         }
     }
 }

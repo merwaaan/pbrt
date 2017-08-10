@@ -48,6 +48,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="accelerators\BVH.cs" />
+    <Compile Include="bxdfs\FresnelBlend.cs" />
     <Compile Include="bxdfs\MicrofacetReflection.cs" />
     <Compile Include="bxdfs\OrenNayar.cs" />
     <Compile Include="bxdfs\LambertianReflection.cs" />
@@ -82,11 +84,15 @@
     <Compile Include="filters\BoxFilter.cs" />
     <Compile Include="integrators\DepthIntegrator.cs" />
     <Compile Include="integrators\DummyIntegrator.cs" />
+    <Compile Include="integrators\DirectLightingIntegrator.cs" />
+    <Compile Include="lights\DiffuseAreaLight.cs" />
+    <Compile Include="lights\AreaLight.cs" />
     <Compile Include="lights\PointLight.cs" />
     <Compile Include="materials\MirrorMaterial.cs" />
     <Compile Include="materials\PlasticMaterial.cs" />
     <Compile Include="materials\MatteMaterial.cs" />
     <Compile Include="samplers\RandomSampler.cs" />
+    <Compile Include="shapes\Disk.cs" />
     <Compile Include="tests\Scenes.cs" />
     <Compile Include="tests\Setups.cs" />
     <Compile Include="Window.cs" />

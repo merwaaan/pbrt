@@ -1,4 +1,5 @@
 ﻿using OpenTK;
+using System;
 
 namespace pbrt.core.geometry
 {
@@ -63,6 +64,38 @@ namespace pbrt.core.geometry
                 0, 0, 0, 1);
 
             return new Transform(m, mInv);
+        }
+
+        public static Transform RotateX(float deg)
+        {
+            var rad = deg * MathUtils.Pi / 180;
+
+            var m = new Matrix4(
+                1, 0, 0, 0,
+                0, (float)Math.Cos(rad), -(float)Math.Sin(rad), 0,
+                0, (float)Math.Sin(rad), (float)Math.Cos(rad), 0,
+                0, 0, 0, 1);
+
+            var t = m;
+            t.Transpose();
+
+            return new Transform(m, t);
+        }
+
+        public static Transform RotateY(float deg)
+        {
+            var rad = deg * MathUtils.Pi / 180;
+
+            var m = new Matrix4(
+                (float)Math.Cos(rad), 0, (float)Math.Sin(rad), 0,
+                0, 1, 0, 0,
+                (float)-Math.Sin(rad), 0, (float)Math.Cos(rad), 0,
+                0, 0, 0, 1);
+
+            var t = m;
+            t.Transpose();
+
+            return new Transform(m, t);
         }
 
         public static Transform LookAt(Point3<float> pos, Point3<float> target, Vector3<float> up)
@@ -152,7 +185,7 @@ namespace pbrt.core.geometry
         public static RayDifferential operator *(Transform t, RayDifferential rd)
         {
             Ray tr = t * new Ray(rd);
-            
+
             return new RayDifferential(tr.O, tr.D, tr.Tmax, tr.Time/*, tr.medium*/)
             {
                 HasDifferentials = rd.HasDifferentials,

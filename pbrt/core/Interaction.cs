@@ -21,7 +21,7 @@ namespace pbrt
 
         public bool IsSurfaceInteraction()
         {
-            return N.X != 0 && N.Y != 0 && N.Z != 0;
+            return N.X != 0 || N.Y != 0 || N.Z != 0;
         }
 
         // Create a ray originating from this interaction point and going to the given one.

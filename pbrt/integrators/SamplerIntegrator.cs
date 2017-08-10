@@ -16,13 +16,9 @@ namespace pbrt.integrators
 
         public abstract Spectrum Li(RayDifferential ray, Scene scene, Camera camera, Sampler sampler, int depth = 0);
 
-        protected virtual void Preprocess()
-        {
-        }
-
         public override void Render(Scene scene, Camera camera, Window window = null)
         {
-            Preprocess();
+            Preprocess(scene);
 
             // Compute the number of tiles to use
 
@@ -38,6 +34,9 @@ namespace pbrt.integrators
             //Parallel.For(0, nTiles.X * nTiles.Y, tile =>
             Parallel.For(0, nTiles.X * nTiles.Y, new ParallelOptions { MaxDegreeOfParallelism = Program.ThreadCount }, tile =>
             {
+                if (Window.Random == null)
+                    Window.Random = new Random();
+
                 var tileX = tile % nTiles.X;
                 var tileY = tile / nTiles.X;
 
@@ -62,7 +61,10 @@ namespace pbrt.integrators
                     do
                     {
                         var cameraSample = tileSampler.GetCameraSample(pixel);
+                        if (pixel.X == 48 && pixel.Y == 209)
+                        {
 
+                        }
                         // Generate a camera ray for the current sample
                         var rayWeight = camera.GenerateRayDifferential(cameraSample, out RayDifferential ray);
                         ray.ScaleDifferentials((float)(1.0f / Math.Sqrt(tileSampler.SamplesPerPixel)));

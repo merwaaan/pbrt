@@ -1,5 +1,4 @@
-﻿using OpenTK.Graphics;
-using pbrt.core.geometry;
+﻿using pbrt.core.geometry;
 
 namespace pbrt.core
 {
@@ -26,8 +25,10 @@ namespace pbrt.core
             worldToLight = lightToWorld.Inverse();
         }
 
-        public abstract Spectrum Sample_Li(SurfaceInteraction inter, Point2<float> u, out Vector3<float> wi, out float pdf, out VisibilityTester vis);
         public abstract Spectrum Power();
+
+        public abstract Spectrum Sample_Li(Interaction inter, Point2<float> u, out Vector3<float> wi, out float pdf, out VisibilityTester vis);
+        public abstract float Pdf_Li(Interaction inter, Vector3<float> wi);
 
         public virtual void Preprocess()
         {

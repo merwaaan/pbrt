@@ -1,4 +1,5 @@
 ﻿using pbrt.core.geometry;
+using pbrt.lights;
 
 namespace pbrt.core
 {
@@ -9,7 +10,11 @@ namespace pbrt.core
 
         public abstract Bounds3<float> WorldBounds { get; }
 
-        //public abstract AreaLight GetAreaLight();
+        public virtual AreaLight GetAreaLight()
+        {
+            return null;
+        }
+
         //public abstract Material GetMaterial();
 
         public abstract bool Intersect(Ray ray, out SurfaceInteraction inter);

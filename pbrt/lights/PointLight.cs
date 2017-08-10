@@ -21,7 +21,7 @@ namespace pbrt.lights
             return intensity * (float)(4 * Math.PI);
         }
 
-        public override Spectrum Sample_Li(SurfaceInteraction inter, Point2<float> u, out Vector3<float> wi, out float pdf, out VisibilityTester visTester)
+        public override Spectrum Sample_Li(Interaction inter, Point2<float> u, out Vector3<float> wi, out float pdf, out VisibilityTester visTester)
         {
             var lightToPoint = position - inter.P;
             wi = lightToPoint.Normalized();
@@ -29,6 +29,11 @@ namespace pbrt.lights
             visTester = new VisibilityTester(inter, new SurfaceInteraction(position));
 
             return intensity / lightToPoint.LengthSquared();
+        }
+
+        public override float Pdf_Li(Interaction inter, Vector3<float> wi)
+        {
+            return 0;
         }
     }
 }

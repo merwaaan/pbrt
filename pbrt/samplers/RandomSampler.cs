@@ -2,8 +2,8 @@
 {
     public class RandomSampler : PixelSampler
     {
-        public RandomSampler(int samplesPerPixel)
-            : base(samplesPerPixel, 0)
+        public RandomSampler()
+            : base(0, 0)
         {
         }
     }

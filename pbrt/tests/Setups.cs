@@ -20,10 +20,15 @@ namespace pbrt
         {
             return new DepthIntegrator(new PixelSampler(1, 0));
         }
-        
-        public static Integrator Whitted(int depth, int samplesPerPixel)
+
+        public static Integrator Whitted(int depth = 3, int samplesPerPixel = 10)
         {
             return new WhittedIntegrator(new PixelSampler(samplesPerPixel, 0), depth);
+        }
+
+        public static Integrator DirectLighting(int depth, int samplesPerPixel)
+        {
+            return new DirectLightingIntegrator(new PixelSampler(samplesPerPixel, 0), depth);
         }
     }
 }

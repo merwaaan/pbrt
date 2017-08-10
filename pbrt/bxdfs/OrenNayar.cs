@@ -53,10 +53,5 @@ namespace pbrt.bxdfs
 
             return reflectance * MathUtils.InvPi * (a + b * maxCos * sinAlpha * tanBeta);
         }
-
-        public override Spectrum Sample_f(Vector3<float> wo, out Vector3<float> wi, Point2<float> sample, out float pdf, out BxDFType type)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

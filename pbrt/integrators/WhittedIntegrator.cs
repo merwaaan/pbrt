@@ -18,13 +18,13 @@ namespace pbrt.integrators
             var L = Spectrum.Zero;
 
             // If the ray doesn't intersect the scene, return the background radiance
-            if (!scene.Intersect(ray, out SurfaceInteraction inter))
+            if (!scene.Intersect(ray, out SurfaceInteraction inter) || inter == null)
             {
                 foreach (var light in scene.Lights)
                     L += light.Le(ray);
                 return L;
             }
-
+            
             // If the ray intersects something, we need to compute how the light is scattered
 
             var n = inter.Shading.N;
@@ -54,6 +54,9 @@ namespace pbrt.integrators
                         L += f * Li * Vector3<float>.AbsDot(wi, n.ToVector3()) * (1.0f / pdf);
                     /*else
                         L = new Spectrum(0, 0, 50);*/
+                }
+                else
+                {
                 }
             }
 

@@ -59,9 +59,8 @@ namespace pbrt.core
 
         public Spectrum Le(Vector3<float> w)
         {
-            return Spectrum.Zero;
-            //var areaLight = Primitive.GetAreaLight();
-            //return areaLight != null ? area.L() : Spectrum.Black();
+            var areaLight = Primitive.GetAreaLight();
+            return areaLight != null ? areaLight.L(this, w) : Spectrum.Zero;
         }
     }
 }

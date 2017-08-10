@@ -5,10 +5,12 @@ namespace pbrt.core
 {
     static class MathUtils
     {
-        public static float Pi => (float)Math.PI;
-        public static float InvPi => (float)(1.0f / Math.PI);
-        public static float PiOver2 => (float)(Math.PI / 2.0f);
-        public static float PiOver4 => (float)(Math.PI / 4.0f);
+        public const float Pi = 3.1415926535897f;
+        public const float InvPi = 0.31830988618f;
+        public const float Inv2Pi = 0.15915494309f;
+        public const float PiOver2 = 1.57079632679f;
+        public const float PiOver4 = 0.78539816339f;
+        public const float TwoPi = 6.28318530718f;
 
         public static float Clamp(float x, float min, float max)
         {
@@ -56,11 +58,6 @@ namespace pbrt.core
             return new Point2<float>((float)Math.Cos(theta), (float)Math.Sin(theta)) * r;
         }
 
-        public static bool SameHemisphere(Vector3<float> w, Vector3<float> wp)
-        {
-            return w.Z * wp.Z > 0;
-        }
-
         public static bool Quadratic(float a, float b, float c, out float t0, out float t1)
         {
             t0 = t1 = 0.0f;
@@ -88,6 +85,35 @@ namespace pbrt.core
             }
 
             return true;
+        }
+
+        public static Vector3<float> UniformSampleHemisphere(Point2<float> u)
+        {
+            var z = u.X;
+            var r = Math.Sqrt(Math.Max(0, 1 - z * z));
+            var phi = 2 * Pi * u.Y;
+            return new Vector3<float>((float)(r * Math.Cos(phi)), (float)(r * Math.Sin(phi)), z);
+        }
+
+        public static float UniformHemispherePdf()
+        {
+            return Inv2Pi;
+        }
+
+        public static bool SameHemisphere(Vector3<float> w, Vector3<float> wp)
+        {
+            return w.Z * wp.Z > 0;
+        }
+
+        public static Vector3<float> SphericalDirection(float sinTheta, float cosTheta, float phi)
+        {
+            return new Vector3<float>(sinTheta * (float)Math.Cos(phi), sinTheta * (float)Math.Sin(phi), cosTheta);
+        }
+        public static float PowerHeuristic(int nf, float fPdf, int ng, float gPdf)
+        {
+            var f = nf * fPdf;
+            var g = ng * gPdf;
+            return (f * f) / (f * f + g * g);
         }
     }
 }

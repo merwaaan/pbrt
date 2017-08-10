@@ -12,7 +12,7 @@ namespace pbrt.integrators
 
         public override Spectrum Li(RayDifferential ray, Scene scene, Camera camera, Sampler sampler, int depth = 0)
         {
-            var r = (float)new Random(DateTime.Now.Millisecond).NextDouble();
+            var r = (float)Window.Random.NextDouble();
             return new Spectrum(r);
         }
     }

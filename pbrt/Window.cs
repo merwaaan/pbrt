@@ -4,13 +4,17 @@ using OpenTK.Graphics.OpenGL;
 using pbrt.core;
 using pbrt.core.geometry;
 using System;
-using System.Diagnostics;
 using System.Threading.Tasks;
 
 namespace pbrt
 {
     public class Window : GameWindow
     {
+        // Main random number generator
+        // Must be static or we obtain weird results since Random is not thread-safe
+        [ThreadStatic]
+        public static Random Random;
+
         private Integrator integrator;
         private SceneDescription sceneDescription;
 
@@ -35,9 +39,12 @@ namespace pbrt
             GL.BindTexture(TextureTarget.Texture2D, texture);
             GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Linear);
             GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
-
+            
             id = WindowId++;
-            Location = new System.Drawing.Point(Width * id, 0);
+            
+            var x = (Width * id) % DisplayDevice.Default.Width;
+            var y = (Width * id) / DisplayDevice.Default.Height * 100;
+            Location = new System.Drawing.Point(x, y);
         }
 
         protected override void OnLoad(EventArgs e)
@@ -47,8 +54,6 @@ namespace pbrt
             // Start rendering
             Task.Factory.StartNew(() => integrator.Render(sceneDescription.Scene, sceneDescription.Camera, this));
         }
-
-        private static readonly object renderingLock = new object();
 
         protected override void OnRenderFrame(FrameEventArgs e)
         {

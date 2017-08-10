@@ -108,6 +108,11 @@ namespace pbrt.core.geometry
             Z = z;
         }
 
+        public Point3(T x)
+        {
+            X = Y = Z = x;
+        }
+
         public Point3(Point3<T> p)
         {
             X = p.X;

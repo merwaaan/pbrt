@@ -66,7 +66,7 @@ namespace pbrt.cameras
             return 1;
         }
 
-        public static OrthographicCamera Create(Point3<float> position, float size = 1)
+        public static OrthographicCamera Create(Point3<float> position, float size = 2)
         {
             var half = size / 2;
             var ratio = (float)Program.Width / Program.Height * half;

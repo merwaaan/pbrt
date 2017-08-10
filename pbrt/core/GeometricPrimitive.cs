@@ -1,4 +1,5 @@
 ﻿using pbrt.core.geometry;
+using pbrt.lights;
 
 namespace pbrt.core
 {
@@ -6,16 +7,22 @@ namespace pbrt.core
     {
         public readonly Shape Shape;
         public readonly Material Material;
+        public readonly AreaLight AreaLight;
 
         public override Bounds3<float> WorldBounds => Shape.WorldBounds();
-
-        //private AreaLight areaLight;
+        
         //private MediumInterface medium;
 
-        public GeometricPrimitive(Shape shape, Material material)
+        public GeometricPrimitive(Shape shape, Material material, AreaLight areaLight = null)
         {
             Shape = shape;
             Material = material;
+            AreaLight = areaLight;
+        }
+
+        public override AreaLight GetAreaLight()
+        {
+            return AreaLight;
         }
 
         public override bool Intersect(Ray ray, out SurfaceInteraction inter)

@@ -27,9 +27,10 @@ namespace pbrt.samplers
 
         public override Sampler Clone(int seed)
         {
-            var clone = new PixelSampler(SamplesPerPixel, Samples1D.Count);
-            clone.Random = new Random(seed);
-            return clone;
+            return new PixelSampler(SamplesPerPixel, Samples1D.Count)
+            {
+                Random = new Random(seed)
+            };
         }
 
         public override bool StartNextSample()
@@ -46,7 +47,7 @@ namespace pbrt.samplers
 
         public override float Get1D()
         {
-            // Progressively consume sampled values
+            // Consume sampled values
             if (current1DDimension < Samples1D.Count)
                 return Samples1D[current1DDimension++][CurrentPixelSampleIndex];
             // Return random values when exceeding the allocated values
@@ -56,7 +57,7 @@ namespace pbrt.samplers
 
         public override Point2<float> Get2D()
         {
-            // Progressively consume sampled values
+            // Consume sampled values
             if (current2DDimension < Samples2D.Count)
                 return Samples2D[current2DDimension++][CurrentPixelSampleIndex];
             // Return random values when exceeding the allocated values

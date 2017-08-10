@@ -23,7 +23,7 @@ namespace pbrt.core
             {
                 worldBounds = Primitives.First().WorldBounds;
                 foreach (var p in Primitives.Skip(1))
-                    worldBounds = Bounds3<float>.Union(worldBounds, p.WorldBounds);
+                    worldBounds = worldBounds.Union(p.WorldBounds);
             }
         }
 

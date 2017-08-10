@@ -100,6 +100,12 @@ namespace pbrt.core.geometry
         public Point3<T> Min { get; protected set; }
         public Point3<T> Max { get; protected set; }
 
+        public Bounds3()
+        {
+            Min = new Point3<T>((dynamic)float.PositiveInfinity);
+            Max = new Point3<T>((dynamic)float.NegativeInfinity);
+        }
+
         public Bounds3(Point3<T> p)
         {
             Min = new Point3<T>(p);
@@ -112,6 +118,24 @@ namespace pbrt.core.geometry
             Max = new Point3<T>(Math.Max((dynamic)p1.X, (dynamic)p2.X), Math.Max((dynamic)p1.Y, (dynamic)p2.Y), Math.Max((dynamic)p1.Z, (dynamic)p2.Z));
         }
 
+        public Vector3<T> Diagonal()
+        {
+            return Max - Min;
+        }
+
+        public int MaximumExtent()
+        {
+            var d = Diagonal();
+
+            if ((dynamic)d.X > d.Y && (dynamic)d.X > d.Z)
+                return 0;
+
+            if ((dynamic)d.Y > d.Z)
+                return 1;
+
+            return 2;
+        }
+
         public bool IntersectP(Ray ray, out float t0, out float t1)
         {
             t0 = 0;
@@ -122,21 +146,21 @@ namespace pbrt.core.geometry
                 var invRayDir = 1 / ray.D[i];
                 var tNear = ((dynamic)Min[i] - ray.O[i]) * invRayDir;
                 var tFar = ((dynamic)Max[i] - ray.O[i]) * invRayDir;
-                
+
                 if (tNear > tFar)
                 {
                     var tmp = tNear;
                     tNear = tFar;
                     tFar = tmp;
                 }
-                
+
                 t0 = tNear > t0 ? tNear : t0;
                 t1 = tFar < t1 ? tFar : t1;
 
                 if (t0 > t1)
                     return false;
             }
-            
+
             return true;
         }
 
@@ -158,17 +182,17 @@ namespace pbrt.core.geometry
                     Math.Max((dynamic)Max.Z, (dynamic)p.Z)));
         }
 
-        public static Bounds3<T> Union(Bounds3<T> b1, Bounds3<T> b2)
+        public Bounds3<T> Union(Bounds3<T> b)
         {
             return new Bounds3<T>(
                 new Point3<T>(
-                    Math.Min((dynamic)b1.Min.X, (dynamic)b2.Min.X),
-                    Math.Min((dynamic)b1.Min.Y, (dynamic)b2.Min.Y),
-                    Math.Min((dynamic)b1.Min.Z, (dynamic)b2.Min.Z)),
+                    Math.Min((dynamic)Min.X, (dynamic)b.Min.X),
+                    Math.Min((dynamic)Min.Y, (dynamic)b.Min.Y),
+                    Math.Min((dynamic)Min.Z, (dynamic)b.Min.Z)),
                 new Point3<T>(
-                    Math.Max((dynamic)b1.Max.X, (dynamic)b2.Max.X),
-                    Math.Max((dynamic)b1.Max.Y, (dynamic)b2.Max.Y),
-                    Math.Max((dynamic)b1.Max.Z, (dynamic)b2.Max.Z)));
+                    Math.Max((dynamic)Max.X, (dynamic)b.Max.X),
+                    Math.Max((dynamic)Max.Y, (dynamic)b.Max.Y),
+                    Math.Max((dynamic)Max.Z, (dynamic)b.Max.Z)));
         }
 
         public static Bounds3<T> Intersect(Bounds3<T> b1, Bounds3<T> b2)
